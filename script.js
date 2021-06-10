@@ -1,21 +1,30 @@
 // TODO: add code here
 let astronautsArray
+
+function buildHead(document, nameFirst, nameLast) {
+  let header = document.createElement("h3");
+  header.innerHTML = `${nameFirst} ${nameLast}`;
+  return header;
+}
+
 window.addEventListener("load", function() {
   fetch("https://handlers.education.launchcode.org/static/astronauts.json").then(function (response) {
     return response.json();
   }).then(function(json) {
     astronautsArray = json;
+    astronautsArray.sort((a,b) => b.hoursInSpace - a.hoursInSpace);
+    let count = document.querySelector("#count");
+    let p = document.createElement("p");
+    p.innerHTML = `Astronaut count: ${astronautsArray.length}`;
+    count.appendChild(p);
     for (let i of astronautsArray) {
-      let container = document.querySelector("#container");
+      let division = document.querySelector("#container");
 
       let astDiv = document.createElement("div");
       astDiv.className = "astronaut";
 
       let bioDiv = document.createElement("div");
       bioDiv.className = "bio";
-
-      let header = document.createElement("h3");
-      header.innerHTML = `${i.firstName} ${i.lastName}`;
 
       let img = document.createElement("img");
       img.className = "avatar";
@@ -27,6 +36,9 @@ window.addEventListener("load", function() {
       let li3 = document.createElement("li");
       li1.innerHTML = `Hours in space: ${i.hoursInSpace}`
       li2.innerHTML = `Active: ${i.active}`
+      if (i.active) {
+        li2.style.color = "green";
+      }
       let skillsArray = i.skills;
       let skills = "";
       for (let j of skillsArray) {
@@ -42,14 +54,13 @@ window.addEventListener("load", function() {
       list.appendChild(li2);
       list.appendChild(li3);
 
-      bioDiv.appendChild(header);
+      bioDiv.appendChild(buildHead(document, i.firstName, i.lastName));
       bioDiv.appendChild(list);
 
       astDiv.appendChild(bioDiv);
       astDiv.appendChild(img);
 
-      container.appendChild(astDiv);
-
+      division.appendChild(astDiv);
     }
   })
 });
