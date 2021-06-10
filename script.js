@@ -7,6 +7,28 @@ function buildHead(document, nameFirst, nameLast) {
   return header;
 }
 
+function buildList(document, hours, active, skills) {
+  let ulist = document.createElement("ul");
+  let list1 = document.createElement("li");
+  let list2 = document.createElement("li");
+  let list3 = document.createElement("li");
+  let color = "";
+  if (active) {
+    color = "green";
+  } else {
+    color = "red";
+  }
+  list1.innerHTML = `Hours in space: ${hours}`
+  list2.innerHTML = `Active: <span style="color:${color}">${active}</span>`
+  list3.innerHTML = `Skills: ${skills.join(", ")}`
+
+  ulist.appendChild(list1);
+  ulist.appendChild(list2);
+  ulist.appendChild(list3);
+
+  return ulist
+}
+
 window.addEventListener("load", function () {
   fetch("https://handlers.education.launchcode.org/static/astronauts.json").then(function (response) {
     return response.json();
@@ -30,23 +52,8 @@ window.addEventListener("load", function () {
       img.className = "avatar";
       img.src = i.picture;
 
-      let list = document.createElement("ul");
-      let li1 = document.createElement("li");
-      let li2 = document.createElement("li");
-      let li3 = document.createElement("li");
-      li1.innerHTML = `Hours in space: ${i.hoursInSpace}`
-      li2.innerHTML = `Active: ${i.active}`
-      if (i.active) {
-        li2.style.color = "green";
-      }
-      li3.innerHTML = `Skills: ${i.skills.join(", ")}`;
-
-      list.appendChild(li1);
-      list.appendChild(li2);
-      list.appendChild(li3);
-
       bioDiv.appendChild(buildHead(document, i.firstName, i.lastName));
-      bioDiv.appendChild(list);
+      bioDiv.appendChild(buildList(document, i.hoursInSpace, i.active, i.skills));
 
       astDiv.appendChild(bioDiv);
       astDiv.appendChild(img);
