@@ -7,12 +7,12 @@ function buildHead(document, nameFirst, nameLast) {
   return header;
 }
 
-window.addEventListener("load", function() {
+window.addEventListener("load", function () {
   fetch("https://handlers.education.launchcode.org/static/astronauts.json").then(function (response) {
     return response.json();
-  }).then(function(json) {
-    astronautsArray = json;
-    astronautsArray.sort((a,b) => b.hoursInSpace - a.hoursInSpace);
+  }).then(function (json) {
+    let astronautsArray = json;
+    astronautsArray.sort((a, b) => b.hoursInSpace - a.hoursInSpace);
     let count = document.querySelector("#count");
     let p = document.createElement("p");
     p.innerHTML = `Astronaut count: ${astronautsArray.length}`;
@@ -39,16 +39,7 @@ window.addEventListener("load", function() {
       if (i.active) {
         li2.style.color = "green";
       }
-      let skillsArray = i.skills;
-      let skills = "";
-      for (let j of skillsArray) {
-        if (j === skillsArray[skillsArray.length -1]) {
-          skills = skills + j;
-        } else {
-          skills = skills + j + ", "
-        }
-      }
-      li3.innerHTML = `Skills: ${skills}`;
+      li3.innerHTML = `Skills: ${i.skills.join(", ")}`;
 
       list.appendChild(li1);
       list.appendChild(li2);
@@ -63,4 +54,5 @@ window.addEventListener("load", function() {
       division.appendChild(astDiv);
     }
   })
+
 });
